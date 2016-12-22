@@ -111,7 +111,7 @@ def handle_messages():
             
 
         #Location data to switch modes
-        elif resp[u'value'] == "restaurants":
+        if resp[u'value'] == "restaurants":
           restaurants = ''
           print("rest method")
           message = get_restaurants(sender)
