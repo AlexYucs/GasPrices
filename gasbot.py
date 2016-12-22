@@ -111,21 +111,21 @@ def handle_messages():
             
 
         #Location data to switch modes
-        if resp[u'value'] == "restaurants":
+        if resp[u'value'] == "gas":
           restaurants = ''
           print("rest method")
           message = get_restaurants(sender)
           if message['status']== "OK":
             for place in message['results']:
-              if 'permanently_closed' not in place or place['permanently_closed'] is False:
+                print(place)
+              #if 'permanently_closed' not in place or place['permanently_closed'] is False:
                 #if 'opennow' in place and place['opennow'] is True:
-                restaurant = "Name: "+str(place['name']) +"  Rating: "
-                if 'rating' in place:
-                  restaurant+= str(place['rating'])
-                else:
-                  restaurant+= "None"
-                  
-                send_message(PAT, sender, restaurant)
+              #  restaurant = "Name: "+str(place['name']) +"  Rating: "
+              #  if 'rating' in place:
+              #    restaurant+= str(place['rating'])
+              #  else:
+              #    restaurant+= "None"
+                  send_message(PAT, sender, "done")
           else:
             send_message(PAT, sender, "Error")
           #message = str(get_restaurants(sender))
@@ -233,12 +233,12 @@ def my_action(request):
 
     
     
-def get_restaurants(sender):
+def get_gas(sender):
   f = open("geo.txt", "r")
   Location = f.read()
   send_message(PAT, sender, str(Location))
   print("finished loc")
-  loc_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+Location+"&rankby=distance&type=restaurant&key="+str(os.environ.get('GAPI',3))
+  loc_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+Location+"&rankby=distance&type=gas_station&key="+str(os.environ.get('GAPI',3))
   print("url done")
   resp = urllib.urlopen(loc_url)
   print("json read")
