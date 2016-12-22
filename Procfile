@@ -1,1 +1,1 @@
-web: gunicorn pyjbot:app
+web: gunicorn gasbot:app
