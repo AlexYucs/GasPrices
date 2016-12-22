@@ -30,8 +30,6 @@ app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
-site = ''
-chatAl = False
 loc = False
 lat = ''
 lon = ''
@@ -44,7 +42,7 @@ PAT = str(os.environ.get('FBKey',3))
 @app.route('/', methods=['GET'])
 def handle_verification():
   print "Handling Verification."
-  if request.args.get('hub.verify_token', '') == 'my_voice_is_my_password_verify_me':
+  if request.args.get('hub.verify_token', '') == 'gasbotver':
     print "Verification successful!"
     return request.args.get('hub.challenge', '')
   else:
@@ -56,8 +54,7 @@ def handle_verification():
 @app.route('/', methods=['POST'])
 def handle_messages():
   #variables
-  global site
-  global chatAl
+
   global loc
   global lat 
   global lon
@@ -89,21 +86,7 @@ def handle_messages():
   #checks if chat option is on or not
   for sender, message in messaging_events(payload):
     
-    #chatting with eliza ai
-    if chatAl:
-      #end chat
-      if message == "bye":
-        chatAl =False
-        
-      #chat and get response
-      m1 = eliza.analyze(message)
-      print("Trying to send...")
-      send_message(PAT, sender, m1)
-      print("Probably sent")
-    
-    #not chatting. Use Wit.AI
-    else:
-      
+  
       print "Incoming from %s: %s" % (sender, message)
       print type(message)
       resp = client.message(message) #get response from wit.ai
@@ -129,22 +112,10 @@ def handle_messages():
       #id type of response and run correct method
       if u'value' in resp:
         
-        #grocery response to get list of groceries. From imported class
-        if resp[u'value'] == "grocery":
-          message = get_cooking()
-          while( len(message) > 300):
-            msg2 = message[:300]
-            message = message[300:]
-            send_message(PAT, sender, msg2)
-          send_message(PAT, sender, message)
-          send_message(PAT, sender, site) 
+        
           
             
-        #get xkcd comic link, poorly implemented rn
-        elif resp[u'value'] == "xkcd":
-          message = "http://xkcd.com/"
-          send_message(PAT, sender, message)
-          
+
         #Location data to switch modes
         elif resp[u'value'] == "restaurants":
           restaurants = ''
@@ -196,27 +167,7 @@ def handle_messages():
           send_message(PAT, sender, message)
           print("Probably sent")
         
-          
-        #talk sets chatAI to true and allows chat with eliza. Use "bye" to end  
-        elif resp[u'value'] == "talk":
-          chatAl =True
-          send_message(PAT, sender, "Okay, what's up?")
-        
-        
-        #not working atm
-        elif resp[u'value'] == "weather":
-          #resp = client.run_actions('my-user-session-42',textmsg, context0)
-          print("This resp weather ")
-          #print (resp)
-          #while('foodList' not in resp):
-          #    resp = client.run_actions('my-user-session-42',textmsg, context0)
-          #    print ("This resp ")
-          #    print(resp)
-          #voice.send_sms(msg[u'from'],str(resp['forecast']))
-          message = "weather"
-          send_message(PAT, sender, message)
-            
-            
+     
         #catch all for other intents  
         else:
           print("Else")
@@ -284,31 +235,8 @@ def send(request, response):
 def my_action(request):
     print('Received from user...', request['text'])
 
-#gotta use a weather module
-def get_forecast(request):
-    context = request['context']
-    entities = request['entities']
 
-    loc = first_entity_value(entities, 'location')
-    if loc:
-        context['forecast'] = 'sunny'
-    else:
-        context['missingLocation'] = True
-        if context.get('forecast') is not None:
-            del context['forecast']
 
-    return context
-
-#works fine so far. Can't run from wit.ai
-def get_cooking():
-    print("Inside grocery")
-    global site
-    context = ""
-    cook = foodSites()
-    cook.initList()
-    context= cook.getIngred()
-    site = cook.getSites()
-    return context
     
     
 def get_restaurants(sender):
@@ -329,11 +257,9 @@ def get_restaurants(sender):
 #wit ai action list
 actions = {
     'send': send,
-    'getForecast': get_forecast,
     'say': say,
     'merge': merge,
     'error': error,
-    "getCooking": get_cooking,
     'my_action': my_action,
 }
 
