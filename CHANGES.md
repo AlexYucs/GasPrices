@@ -1,0 +1,3 @@
+#V1
+- Using google places api to identify local gas stations (Unfortunately no pricing info)
+- May need to try a web scraper
