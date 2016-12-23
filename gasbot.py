@@ -125,7 +125,6 @@ def handle_messages():
               #    restaurant+= str(place['rating'])
               #  else:
               #    restaurant+= "None"
-                  send_message(PAT, sender, "done")
           else:
             send_message(PAT, sender, "Error")
           #message = str(get_restaurants(sender))
