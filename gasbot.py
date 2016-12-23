@@ -114,7 +114,7 @@ def handle_messages():
         if resp[u'value'] == "gas":
           restaurants = ''
           print("rest method")
-          message = get_restaurants(sender)
+          message = get_gas(sender)
           if message['status']== "OK":
             for place in message['results']:
                 print(place)
