@@ -118,11 +118,11 @@ def handle_messages():
           if message['status']["message"]== "Request ok":
             for place in message['stations']:
                 address = place["address"]
-				price = place["reg_price"]
-				distance = place["distance"]
-				name = place["station"]
-				final_resp = name+": $"+price+"  "+distance+" miles\n"+address
-				send_message(PAT, sender, final_resp)
+                price = place["reg_price"]
+                distance = place["distance"]
+                name = place["station"]
+                final_resp = name+": $"+price+"  "+distance+" miles\n"+address
+                send_message(PAT, sender, final_resp)
           else:
             send_message(PAT, sender, "Error")
           time.sleep(6)
