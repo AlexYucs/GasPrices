@@ -115,30 +115,16 @@ def handle_messages():
           restaurants = ''
           print("rest method")
           message = get_gas(sender)
-          if message['status']== "OK":
-            for place in message['results']:
-                print(place)
-              #if 'permanently_closed' not in place or place['permanently_closed'] is False:
-                #if 'opennow' in place and place['opennow'] is True:
-              #  restaurant = "Name: "+str(place['name']) +"  Rating: "
-              #  if 'rating' in place:
-              #    restaurant+= str(place['rating'])
-              #  else:
-              #    restaurant+= "None"
+          if message['status']["message"]== "Request ok":
+            for place in message['stations']:
+                address = place["address"]
+				price = place["reg_price"]
+				distance = place["distance"]
+				name = place["station"]
+				final_resp = name+": $"+price+"  "+distance+" miles\n"+address
+				send_message(PAT, sender, final_resp)
           else:
             send_message(PAT, sender, "Error")
-          #message = str(get_restaurants(sender))
-          #while( len(message) > 300):
-          #  msg2 = message[:300]
-          #  message = message[300:]
-          #  send_message(PAT, sender, msg2)
-          #send_message(PAT, sender, message)
-          #else:
-          #send_message(PAT, sender, "Not ok")
-          
-          #else:
-           # send_message(PAT, sender, "Enter your location:")
-          #loc = True
           time.sleep(6)
 
             
@@ -236,8 +222,9 @@ def get_gas(sender):
   f = open("geo.txt", "r")
   Location = f.read()
   send_message(PAT, sender, str(Location))
+  locarray = Location.split(",")
   print("finished loc")
-  loc_url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+Location+"&rankby=distance&type=gas_station&key="+str(os.environ.get('GAPI',3))
+  loc_url = "http://api.mygasfeed.com/stations/radius/"+locarray[0]+"/"+locarray[1]+"/2/reg/distance/"+str(os.environ.get('GAPI',3))+".json?callback=?"
   print("url done")
   resp = urllib.urlopen(loc_url)
   print("json read")
