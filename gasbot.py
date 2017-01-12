@@ -225,9 +225,12 @@ def get_gas(sender):
   send_message(PAT, sender, str(Location))
   locarray = Location.split(",")
   print("finished loc")
+  print(locarray[0])
+  print(locarray[1])
   loc_url = "http://api.mygasfeed.com/stations/radius/"+str(locarray[0])+"/"+str(locarray[1])+"/2/reg/distance/"+str(os.environ.get('GAPI',3))+".json?"
   print("url done")
   loc_url2 = str(loc_url)
+  print(loc_url2)
   resp = urllib.urlopen(loc_url2)
   print("json read")
   data = resp.read()
