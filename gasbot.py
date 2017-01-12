@@ -231,7 +231,7 @@ def get_gas(sender):
   resp = urllib.urlopen(loc_url2)
   print("json read")
   data = resp.read()
-  #print(data)
+  print(data)
   jData = json.loads(data)
   print("json loaded")
   return jData
