@@ -121,7 +121,8 @@ def handle_messages():
                 price = place["reg_price"]
                 distance = place["distance"]
                 name = place["station"]
-                final_resp = name+": $"+price+"  "+distance+" miles\n"+address
+				city = place["city"]
+                final_resp = name+": $"+price+"  "+distance+"\n"+address+", "+city
                 send_message(PAT, sender, final_resp)
           else:
             send_message(PAT, sender, "Error")
@@ -224,9 +225,10 @@ def get_gas(sender):
   send_message(PAT, sender, str(Location))
   locarray = Location.split(",")
   print("finished loc")
-  loc_url = "http://api.mygasfeed.com/stations/radius/40.741895/-73.989308/2/reg/distance/"+str(os.environ.get('GAPI',3))+".json?"
+  loc_url = "http://api.mygasfeed.com/stations/radius/"+str(locarray[0])+"/"+str(locarray[1])+"/2/reg/distance/"+str(os.environ.get('GAPI',3))+".json?"
   print("url done")
-  resp = urllib.urlopen(loc_url)
+  loc_url2 = str(loc_url)
+  resp = urllib.urlopen(loc_url2)
   print("json read")
   data = resp.read()
   #print(data)
