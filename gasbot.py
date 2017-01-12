@@ -121,7 +121,7 @@ def handle_messages():
                 price = place["reg_price"]
                 distance = place["distance"]
                 name = place["station"]
-				city = place["city"]
+                city = place["city"]
                 final_resp = name+": $"+price+"  "+distance+"\n"+address+", "+city
                 send_message(PAT, sender, final_resp)
           else:
