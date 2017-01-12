@@ -115,7 +115,7 @@ def handle_messages():
           restaurants = ''
           print("rest method")
           message = get_gas(sender)
-          if message['status']["message"]== "Request ok":
+          if 'Status' not in message && message['status']["message"]== "Request ok":
             for place in message['stations']:
                 address = place["address"]
                 price = place["reg_price"]
