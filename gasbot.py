@@ -224,12 +224,12 @@ def get_gas(sender):
   send_message(PAT, sender, str(Location))
   locarray = Location.split(",")
   print("finished loc")
-  loc_url = "http://api.mygasfeed.com/stations/radius/40.741895/-73.989308/2/reg/distance/"+str(os.environ.get('GAPI',3))+".json?callback=?"
+  loc_url = "http://api.mygasfeed.com/stations/radius/40.741895/-73.989308/2/reg/distance/"+str(os.environ.get('GAPI',3))+".json?"
   print("url done")
   resp = urllib.urlopen(loc_url)
   print("json read")
   data = resp.read()
-  print(data)
+  #print(data)
   jData = json.loads(data)
   print("json loaded")
   return jData
